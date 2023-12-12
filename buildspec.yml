@@ -1,0 +1,27 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      nodejs: 18.x
+    commands:
+      - echo "No commands in the install phase"
+
+  build:
+    commands:
+      - echo "install dependencies"
+      - npm install mongodb
+      - npm install domsanitizer
+      - npm install ioredis
+      - npm install log4js
+      - npm install
+  
+  post_build:
+    commands:
+       - aws cloudformation package --template-file function.yml --s3-bucket $S3BUCKET --force-upload --output-template-file function-out.yml
+
+artifacts:
+  type: zip
+  files:
+    - function.yml
+    - function-out.yml
